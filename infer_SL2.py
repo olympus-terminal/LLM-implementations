@@ -16,19 +16,24 @@ def generate_output(input_text, model, tokenizer):
     return output_text
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python script.py <model_name_or_path> <input_file>")
+    if len(sys.argv) != 4:
+        print("Usage: python script.py <model_name_or_path> <input_file> <output_file>")
         sys.exit(1)
 
     model_name_or_path = sys.argv[1]
     input_file = sys.argv[2]
+    output_file = sys.argv[3]
 
     # Load the model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
     model = AutoModelForCausalLM.from_pretrained(model_name_or_path).to('cuda')  # Move the model to GPU
 
-    with open(input_file, 'r') as file:
+
+#    output_file = sys.argv[3]
+
+with open(input_file, 'r') as file:
+    with open(output_file, 'w') as output_file:
         for line in file:
             input_text = line.strip()
             output_text = generate_output(input_text, model, tokenizer)
-            print(output_text)
+            output_file.write(output_text + "\n")
